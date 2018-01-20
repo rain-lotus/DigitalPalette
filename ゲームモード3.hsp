@@ -1,0 +1,377 @@
+ #include "a2d.hsp"
+ #include "d3m.hsp"
+
+
+/*　　課題
+
+時間制限のこと考える。
+スタート画面作る。
+終了画面作る。
+
+メニューとリンクさせる。
+
+リザルト画面こる。
+
+gotomenuボタン作る
+ 
+*/
+	
+	mmload "Quiz.mp3",5,0
+	mmload "Accent08-1.mp3",6,0
+	
+	buffer 1
+	picload "素材2.png"
+	screen 0,960,720
+	
+	buffer 2
+	picload "素材4.png"
+	screen 0,960,720
+	seikai2=0
+	
+;-----------------------------------------------------------------------
+*restart
+
+	timelimit=30000		;制限時間(ミリ秒単位)
+	starttime=d3Timer()		;スタート時の時間(Windowsが起動してからのミリ秒)を取る
+	seikai=0
+	
+;-----------------------------------------------------------------------
+*skip
+	
+	randomize
+	qr=rnd(200)+20
+	qg=rnd(200)+20
+	qb=rnd(200)+20	
+
+;-----------------------------------------------------------------------
+
+*kesu
+	
+	redraw 0
+	
+	color 255,255,255  ;丸のところを上から塗り替える。
+	boxf 0,70,900,400 
+	
+	r1=0 : g1=0 : b1=0	;とりあえず値を全クリアする。
+	r2=0 : g2=0 : b2=0
+	r3=0 : g3=0 : b3=0
+	psome=0
+	pw=0 : py=0 : pig=0 : po=0 : pr=0 : pyg=0 : pg=0 : pb=0 : psb=0 : pp=0 : pbr=0 : pck=0
+	t=0 : tt=0
+	sr=0 : sg=0 : sb=0 : ssr=0 : ssg=0 : ssb=0
+	
+;-----------------------------------------------------------------------
+
+*meinn
+	
+	ng=1 : mode=1
+	
+	r=(r2-r1)*10*t/100+r1-5 : g=(g2-g1)*(10*t)/100+g1-5 : b=(b2-b1)*(10*t)/100+b1-5
+	rr=(r3-R)*(10*tt)/100+R-5 : gg=(g3-G)*(10*tt)/100+G-5 : bb=(b3-B)*(10*tt)/100+B-5
+	
+	if(r<5 or g<5 or b<5){
+		r=(r2-r1)*(10*t)/100+r1 : g=(g2-g1)*(10*t)/100+g1 : b=(b2-b1)*(10*t)/100+b1
+	}
+	if(rr<5 or gg<5 or bb<5){
+	rr=(r3-R)*(10*tt)/100+R : gg=(g3-G)*(10*tt)/100+G : bb=(b3-B)*(10*tt)/100+B
+	}
+	
+	if(psome>=4){
+		stop
+	}
+	
+	
+	redraw 2
+	
+	clrobj
+	
+	color
+	
+	a=90 : x=60
+	
+	objsize 60,190
+	
+	objimage 1,x*11,0,x*11,380,x*11,190
+	pos a,500
+	button "",*siro
+	
+	pos a+65,500
+	objimage 1,x*7,0,x*7,380,x*7,190
+	button "",*kiiro
+	
+	pos a+65*2,500
+	objimage 1,x*9,0,x*9,380,x*9,190
+	button "",*bejyu
+	
+	pos a+65*3,500
+	objimage 1,x*1,0,x*1,380,x*1,190
+	button "",*orenji
+	
+	pos a+65*4,500
+	objimage 1,0,0,0,380,0,190
+	button "",*aka
+	
+	pos a+65*5,500
+	objimage 1,x*6,0,x*6,380,x*6,190
+	button "",*kimidori
+	
+	pos a+65*6,500
+	objimage 1,x*2,0,x*2,380,x*2,190
+	button "",*midori
+	
+	pos a+65*7,500
+	objimage 1,x*4,0,x*4,380,x*4,190
+	button "",*ao
+	
+	pos a+65*8,500
+	objimage 1,x*5,0,x*5,380,x*5,190
+	button "",*marin
+	
+	pos a+65*9,500
+	objimage 1,x*3,0,x*3,380,x*3,190
+	button "",*murasaki
+	
+	pos a+65*10,500
+	objimage 1,x*8,0,x*8,380,x*8,190
+	button "",*tya
+	
+	pos a+65*11,500
+	objimage 1,x*10,0,x*10,380,x*10,190
+	button "",*kuro
+	
+	objimage 2,0,0		
+	objsize 100,60
+	pos 300,450 : button "",*kesu　;クリア
+	objimage 2,100,0,100,0,100,0
+	pos 500,450 : button "",*skip  ;問題を飛ばす。
+	
+		;--------------------------------------------------------
+	
+	objsize 140,60 : objimage 3,0,0,140,60 : pos 0,0 : button "",*paretto
+	
+	objsize 125,60 : objimage 3,140,0,265,60 : pos 145,0 : button "",*ga
+	
+	objsize 120,60 : objimage 3,265,0,385,60 : pos 275,0 : button "",*credit
+	
+	objsize 95,60 : objimage 3,385,0,480,60 : pos 400,0 : button "",*owari
+	
+;-----------------ここまでぼたん-----------------------------------------------
+	
+	color 255,255,255　;文字のとことかクリア
+	boxf 50,55,930,500
+	
+	color 55,185,155　;うえのメニューのとこ
+	boxf 0,0,960,60
+	
+	pos 226,330 : font "04かんじゅくゴシック",40
+	mes "+" : pos 441,330 : mes"+" : pos 658,330 : mes"="
+	
+	font "04かんじゅくゴシック",30
+	pos 53,215 : mes "bace color"
+	pos 300,215 : mes "color1"
+	pos 515,215 : mes "color2"
+	pos 700,205 : mes "mixed color"
+	
+	gosub *dasu　;表示
+	
+	color qr,qg,qb	;問題の色
+	boxf 410,80,530,200
+	
+	color 38,70,83 : if (psome<2) : font "M+ 1p heavy" ,40 : pos 118,170 : mes "↓"
+	gosub *kuizu
+	
+	pos 700,70
+	color 55,185,155
+	mes "score  "+seikai*10
+	
+		repeat
+		redraw 0
+	
+		nowtime=d3timer()	//今のミリ秒を取得
+		dtime=nowtime-starttime		//スタート時の時間と今の時間の差(経過した時間)
+		color 255,255,255 : boxf 70,70,300,150
+		color 55,185,155 : font "04かんじゅくゴシック",30
+		pos 70,90 : mes "残り:"
+		font "04かんじゅくゴシック",60
+		
+		if((timelimit-dtime)/1000<=5){
+			color 231,111,81
+			
+		}
+		
+		pos 150,70 : mes (timelimit-dtime)/1000
+		color 55,185,155 : font "04かんじゅくゴシック",30
+		pos 230,90 : mes "秒"			//…を、秒単位に変換して書く
+	
+	
+		color 255,255,255 : boxf 700,70,1000,150
+		pos 700,70 : color 55,185,155
+		mes "score  "+seikai*10	
+		
+		if (dtime>timelimit) : goto *rizaruto//dtimeがtimelimitより大きくなった(制限時間が経過した)らループを抜ける
+		wait 1        ;待つ
+		redraw 1
+	loop         ;repeatへ戻る
+	
+	redraw 1
+	
+	stop
+	
+;---------------------------------------------------------------------------------------------------------
+
+*dasu
+	
+	switch psome
+	
+	case 3	
+		xx1=475.00 : xx2=645.00 : yy1=265.00 : yy2=435.00 : sa=20.00
+		xxw1=472.00 : xxw2=648.00 : yyw1=262.00 : yyw2=438.00
+		
+		switch tt
+			case 1 : xx1=xx1+sa : yy1=yy1+sa : xx2=xx2-sa : yy2=yy2-sa : xxw1=xxw1+sa : yyw1=yyw1+sa : xxw2=xxw2-sa : yyw2=yyw2-sa
+			case 2 : xx1=xx1+sa/30*29 : yy1=yy1+sa/30*29 : xx2=xx2-sa/30*29 : yy2=yy2-sa/30*29 : xxw1=xxw1+sa/30*29 : yyw1=yyw1+sa/30*29 : xxw2=xxw2-sa/30*29 : yyw2=yyw2-sa/30*29
+			case 3 : xx1=xx1+sa/30*25 : yy1=yy1+sa/30*25 : xx2=xx2-sa/30*25 : yy2=yy2-sa/30*25 : xxw1=xxw1+sa/30*25 : yyw1=yyw1+sa/30*25 : xxw2=xxw2-sa/30*25 : yyw2=yyw2-sa/30*25
+			case 4 : xx1=xx1+sa/30*16 : yy1=yy1+sa/30*16 : xx2=xx2-sa/30*16: yy2=yy2-sa/30*16 : xxw1=xxw1+sa/30*16 : yyw1=yyw1+sa/30*16 : xxw2=xxw2-sa/30*16: yyw2=yyw2-sa/30*16
+			swbreak
+			swend
+			
+		if(r3=253) : Color 200,200,200 : circle xxw1,yyw1,xxw2,yyw2
+	
+		color 38,70,83 : font "M+ 1p heavy" ,40 : pos 545,165 : mes "↓"
+		
+		Color r3,g3,b3 : circle xx1,yy1,xx2,yy2
+		
+		Color rr,gg,bb : circle 705,255,895,445
+
+	case 2
+		x1=260.00 : y1=265.00 : x2=430.00 : y2=435.00 : sa=20.00
+		xw1=257.00 : yw1=262.00 : xw2=433.00 : yw2=438.00 
+		
+		switch t
+			case 1 : x1=x1+sa : y1=y1+sa : x2=x2-sa : y2=y2-sa : xw1=xw1+sa : yw1=yw1+sa : xw2=xw2-sa : yw2=yw2-sa
+			case 2 : x1=x1+sa/30*29 : y1=y1+sa/30*29 : x2=x2-sa/30*29 : y2=y2-sa/30*29 : xw1=xw1+sa/30*29 : yw1=yw1+sa/30*29 : xw2=xw2-sa/30*29 : yw2=yw2-sa/30*29
+			case 3 : x1=x1+sa/30*25 : y1=y1+sa/30*25 : x2=x2-sa/30*25 : y2=y2-sa/30*25 : xw1=xw1+sa/30*25 : yw1=yw1+sa/30*25 : xw2=xw2-sa/30*25 : yw2=yw2-sa/30*25
+			case 4 : x1=x1+sa/30*16 : y1=y1+sa/30*16 : x2=x2-sa/30*16: y2=y2-sa/30*16 : xw1=xw1+sa/30*16 : yw1=yw1+sa/30*16 : xw2=xw2-sa/30*16: yw2=yw2-sa/30*16
+			swbreak
+			swend
+	
+		if(r2=253) : Color 200,200,200 : circle xw1,yw1,xw2,yw2
+		Color r2,g2,b2 : circle x1,y1,x2,y2
+	
+		if(psome=2){
+			Color r,g,b : circle 705,255,895,445
+			color 38,70,83 : font "M+ 1p heavy" ,40 : pos 330,165 : mes "↓"
+		}
+		
+	case 1
+	
+		if(r1=253) : Color 200,200,200 : circle 42,262,218,438
+		Color r1,g1,b1
+		circle 45,265,215,435
+	
+		if(psome=1){
+			circle 705,255,895,445
+		}
+		
+		
+	swbreak
+	swend
+	
+	
+	if (psome>=4){
+		stop
+	}
+	return
+	
+;----------------------------------------------------------------------
+*kuizu
+	
+	if qr<=r+30 and qr>=r-30 : sr=1 : else : sr=0
+	if qg<=g+30 and qg>=g-30 : sg=1 : else : sg=0
+	if qb<=b+30 and qb>=b-30 : sb=1 : else : sb=0
+	
+	if (sr=1 and sg=1 and sb=1){
+		pos 400,400
+		color 200,0,0
+		;font "04かんじゅくゴシック", 50
+		;mes "seikai"
+		;boxf 
+		mmplay 5
+		;boxf
+		wait 30
+	
+		seikai=seikai+1
+	
+		goto *skip
+	}
+	
+	if qr<=rr+20 and qr>=rr-20 : ssr=1 : else : ssr=0
+	if qg<=gg+20 and qg>=gg-20 : ssg=1 : else : ssg=0
+	if qb<=bb+20 and qb>=bb-20 : ssb=1 : else : ssb=0
+	
+	if (ssr=1 and ssg=1 and ssb=1){
+		pos 400,400
+		color 200,20,20
+		;font "04かんじゅくゴシック", 50
+		;mes "seikai"
+		;boxf 
+		mmplay 5
+		;boxf
+		wait 30
+	
+		seikai=seikai+1
+	
+		goto *skip
+	}
+	
+	return
+;---------------------------------------------------------
+*rizaruto
+	
+	a=1200
+	
+	;repeat
+	
+	redraw 0
+	
+	cls 
+	
+	color 55,185,155 : font "04かんじゅくゴシック",80
+	pos 350,10 : mes "Result"
+	
+	pos 300,150 : mes "score=  "+seikai*10
+	
+	if (seikai>seikai2){
+		max=seikai*10
+	}
+	else{
+		max=seikai2*10
+	}
+	
+	pos 200,250 : mes "bestscore=  "+max
+	
+	a=a-10
+	
+	;if (a=100){
+	;	break
+	;}
+	
+	;await 1
+	redraw 1
+	;loop
+	
+	seikai2=max
+	
+	pos 380,400
+	objsize 200,75
+	objimage 2,0,70,0,70,0,70
+	button "",*caunto
+	
+	pos 330,650
+	objsize 300,50
+	objimage 2,0,190,0,190,0,190
+	button "",*menu
+	
+	stop
+	
+	

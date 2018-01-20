@@ -1,0 +1,767 @@
+ #include "d3m.hsp"
+ #include "a2d.hsp"
+ 
+/*　　課題
+
+およそ完成
+若干座標していクリック判定が条件指定できなくてバグってるから
+絶対にボタン以外を触れない。
+
+backtomenuボタンはCが安定だからそこを押す。
+他だとたまにバグる。
+
+あとは、ゲームモードのときに連打しすぎるとバグるから注意。
+ゆっくり確実に押す。
+
+とりあえず乱数の女神さまに祈る。
+
+*/
+	
+	title　"デジタルパレット"
+	
+	buffer 1
+	picload "素材2.png"
+	screen 0,960,720
+	
+	buffer 2
+	picload "素材4.png"
+	screen 0,960,720
+	
+	buffer 3
+	picload "うえボタン.jpg"
+	
+	buffer 4
+	picload "start.png"
+	
+	seikai2=0 : ng=0 
+	
+
+;-----------------------------------------------------------------------
+screen 0,960,720
+color 0,0,0
+boxf
+font "MSゴシック",50
+color 200,20,20 : pos 300,350
+
+celload "rogo4.png",5
+pos 323,173
+celput 5,0
+
+
+wait 300
+
+
+
+*menu
+	
+	wait 100
+;screen 0,960,720
+
+	redraw 0
+
+	/*確認用box
+	color 0,0,0
+	boxf 310,380,650,445
+	boxf 330,450,640,515
+	boxf 410,520,550,585
+	boxf 430,590,520,655
+	*/
+	
+	clrobj
+	
+	color 255,255,255
+	boxf 
+		
+	mode=0 : ng=0
+	
+	color 55,185,155
+	
+	pos 320,380 : font "DBストレート12",80
+	pos 170,100 : mes "デジタルパレット"
+	
+	pos 310,380 : font "04かんじゅくゴシック",50 : mes "palette mode"
+	pos 330,450 : mes "game mode"
+	pos 410,520 : mes "credit"
+	pos 430,590 : mes "end"
+	
+	celload "menu.png",8
+	pos 0,0 : celput 8,0
+	
+	if (ng=0){
+		onclick *crick
+	}
+	redraw 1
+
+*crick
+
+	if(( mousex >= 310 ) and ( mousex <= 650 )) and (( mousey >= 380 ) and ( mousey <= 445 )){
+		goto *clear
+	}
+	if(( mousex >= 330 ) and ( mousex <= 640 )) and (( mousey >= 450 ) and ( mousey <= 515 )){
+*ggggg
+		goto *stt
+	}
+	if(( mousex >= 410 ) and ( mousex <= 550 )) and (( mousey >= 520 ) and ( mousey <= 585 )){
+		goto *credit
+	}
+	if(( mousex >= 430 ) and ( mousex <= 520 )) and (( mousey >= 590 ) and ( mousey <= 655 )){
+		end
+	}
+	stop
+
+;----------------------------------------------------------------------------
+
+*clear
+	redraw 0
+	
+	if(( mousex >= 420 ) and ( mousex <= 500 )) and (( mousey >= 420 ) and ( mousey <= 460 )){
+		color 255,255,255  ;丸のところを上から塗り替える。
+		boxf 0,80,900,400 
+	
+		r1=0 : g1=0 : b1=0	;とりあえず値を全クリアする。
+		r2=0 : g2=0 : b2=0
+		r3=0 : g3=0 : b3=0
+		psome=0
+		pw=0 : py=0 : pig=0 : po=0 : pr=0 : pyg=0 : pg=0 : pb=0 : psb=0 : pp=0 : pbr=0 : pck=0
+		t=0 : tt=0
+	}
+
+;-----------------------------------------------------------------------
+
+*main
+	
+	ng=0 : mode=0
+	
+	r=(r2-r1)*10*t/100+r1-5 : g=(g2-g1)*(10*t)/100+g1-5 : b=(b2-b1)*(10*t)/100+b1-5
+	rr=(r3-R)*(10*tt)/100+R-5 : gg=(g3-G)*(10*tt)/100+G-5 : bb=(b3-B)*(10*tt)/100+B-5
+	
+	if(r<5 or g<5 or b<5){
+		r=(r2-r1)*(10*t)/100+r1 : g=(g2-g1)*(10*t)/100+g1 : b=(b2-b1)*(10*t)/100+b1
+	}
+	if(rr<5 or gg<5 or bb<5){
+	rr=(r3-R)*(10*tt)/100+R : gg=(g3-G)*(10*tt)/100+G : bb=(b3-B)*(10*tt)/100+B
+	}
+	
+	if(psome>=4){
+		stop
+	}
+	
+	redraw 2
+	
+	clrobj
+	
+	color 255,255,255 : boxf 
+	color
+	
+	a=90 : x=60
+	
+	objsize 60,190
+	
+;-----------------ここからぼたん-----------------------------------------------
+	objimage 1,x*11,0,x*11,380,x*11,190
+	pos a,500
+	button "",*siro
+	
+	pos a+65,500
+	objimage 1,x*7,0,x*7,380,x*7,190
+	button "",*kiiro
+	
+	pos a+65*2,500
+	objimage 1,x*9,0,x*9,380,x*9,190
+	button "",*bejyu
+	
+	pos a+65*3,500
+	objimage 1,x*1,0,x*1,380,x*1,190
+	button "",*orenji
+	
+	pos a+65*4,500
+	objimage 1,0,0,0,380,0,190
+	button "",*aka
+	
+	pos a+65*5,500
+	objimage 1,x*6,0,x*6,380,x*6,190
+	button "",*kimidori
+	
+	pos a+65*6,500
+	objimage 1,x*2,0,x*2,380,x*2,190
+	button "",*midori
+	
+	pos a+65*7,500
+	objimage 1,x*4,0,x*4,380,x*4,190
+	button "",*ao
+	
+	pos a+65*8,500
+	objimage 1,x*5,0,x*5,380,x*5,190
+	button "",*marin
+	
+	pos a+65*9,500
+	objimage 1,x*3,0,x*3,380,x*3,190
+	button "",*murasaki
+	
+	pos a+65*10,500
+	objimage 1,x*8,0,x*8,380,x*8,190
+	button "",*tya
+	
+	pos a+65*11,500 
+	objimage 1,x*10,0,x*10,380,x*10,190
+	button "",*kuro
+	
+	;--------------------------------------------------------
+	
+	objsize 140,60 : objimage 3,0,0,140,60 : pos 0,0 : button "",*paretto
+	
+	objsize 125,60 : objimage 3,140,0,265,60 : pos 145,0 : button "",*ga
+	
+	objsize 120,60 : objimage 3,265,0,385,60 : pos 275,0 : button "",*credit
+	
+	objsize 95,60 : objimage 3,385,0,480,60 : pos 400,0 : button "",*owari
+	
+;-----------------ここまでぼたん-----------------------------------------------
+	
+	color 255,255,255　;文字のとことかクリア
+	boxf 50,55,930,500
+	
+	;デバック用
+	;color 0,0,0
+	;pos 50,60
+	
+/*	
+	
+	font "04かんじゅくゴシック",20
+	mes "psome="+psome+"  r="+r +"  g="+g+"  b="+b+"  rr="+rr+"  gg="+gg+"  bb="+bb+"  t="+t+"  tt="+tt
+	mes "r1="+r1+"  g1="+g1+"  b1="+b1+"  r2="+r2+"  g2="+g2+"  b2="+b2+"  r3="+r3+"  g3="+g3+"  b3="+b3
+	mes "pw="+pw+"  py="+py+"  pig="+pig+"  po="+po+"  pr="+pr+"  pyg="+pyg+"  pg="+pg+"  pb="+pb+"  psb="+psb+"  pp="+pp+"  pbr="+pbr+"  pck="+pck
+	
+*/
+	
+	;if(ng=1){
+	;	objimage 2,0,0		
+	;	objsize 100,60
+	;}
+	
+	color 55,185,155　;うえのメニューのとこ
+	boxf 0,0,960,60
+	
+	pos 226,280 : font "04かんじゅくゴシック",40
+	mes "+" : pos 441,280 : mes"+" : pos 658,280 : mes"="
+	
+	font "04かんじゅくゴシック",30
+	;if(ng=0){
+		pos 53,140 : mes "base color"
+		pos 305,140 : mes "color1"
+		pos 515,140 : mes "color2"
+		pos 710,140 : mes "mixed color"
+	
+	pos 420,420  ;リセット
+	color 55,185,155
+	mes "reset"
+	onclick *clear　;クリア 座標指定
+	
+	color 38,70,83 : if (psome<2) : font "M+ 1p heavy" ,40 : pos 118,170 : mes "↓"
+	gosub *hyouji　;表示
+	
+	redraw 1
+	
+	stop
+	
+//------------------------------------------------------------------------------------
+	
+*siro
+	pw=pw+1　;このボタンを何回押したか。
+	
+	if(pw=1){
+		psome=psome+1
+	}
+	
+	switch psome
+	case 1 : r1=253 : g1=253 : b1=253 : swbreak
+	case 2 : r2=253 : g2=253 : b2=253 : t=t+1 : swbreak
+	case 3 : r3=253 : g3=253 : b3=253 : tt=tt+1 : swbreak
+	swend
+	
+	if (pw>=5){
+		if (psome=2){
+			t=5
+		}
+		else : if(psome=3) {
+			tt=5
+		}
+		pw=5
+	}
+	
+	chose=1
+	
+	if(ng=0) : goto *main
+	if(ng=1) : goto *meinn
+*kiiro
+	py=py+1　;このボタンを何回押したか。
+	
+	if(py=1){
+		psome=psome+1
+	}
+	
+	switch psome
+	case 1 : r1=245.0 : g1=225.0 : b1=10.0 : swbreak
+	case 2 : r2=245.0 : g2=225.0 : b2=10.0 : t=t+1 : swbreak
+	case 3 : r3=245.0 : g3=225.0 : b3=10.0 : tt=tt+1 : swbreak
+	swend
+	
+	chose=2
+	
+	if (py>=5){
+		if (psome=2){
+			t=5
+		}
+		else : if(psome=3) {
+			tt=5
+		}
+		py=5
+	}
+	
+	if(ng=0) : goto *main
+	if(ng=1) : goto *meinn
+*bejyu
+	pig=pig+1　;このボタンを何回押したか。
+	
+	if(pig=1){
+		psome=psome+1
+	}
+	
+	switch psome
+	case 1 : r1=170 : g1=120 : b1=80 : swbreak
+	case 2 : r2=170 : g2=120 : b2=80 : t=t+1 : swbreak
+	case 3 : r3=170 : g3=120 : b3=80 : tt=tt+1 : swbreak
+	swend
+	
+	chose=3
+	
+	if (pig>=5){
+		if (psome=2){
+			t=5
+		}
+		else : if(psome=3) {
+			tt=5
+		}
+		pig=5
+	}
+	
+	if(ng=0) : goto *main
+	if(ng=1) : goto *meinn
+*orenji
+	po=po+1　;このボタンを何回押したか。
+	
+	if(po=1){
+		psome=psome+1
+	}
+	
+	switch psome
+	case 1 : r1=230 : g1=40 : b1=50 : swbreak
+	case 2 : r2=230 : g2=40 : b2=50 : t=t+1 : swbreak
+	case 3 : r3=230 : g3=40 : b3=50 : tt=tt+1 : swbreak
+	swend
+	
+	chose=4
+	
+	if (po>=5){
+		if (psome=2){
+			t=5
+		}
+		else : if(psome=3) {
+			tt=5
+		}
+		po=5
+	}
+	
+	if(ng=0) : goto *main
+	if(ng=1) : goto *meinn
+	
+*aka
+	pr=pr+1　;このボタンを何回押したか。
+	
+	if(pr=1){
+		psome=psome+1
+	}
+	
+	switch psome
+	case 1 : r1=210 : g1=15 : b1=20 : swbreak
+	case 2 : r2=210 : g2=15 : b2=20 : t=t+1 : swbreak
+	case 3 : r3=210 : g3=15 : b3=20 : tt=tt+1 : swbreak
+	swend
+	
+	chose=5
+	
+	if (pr>=5){
+		if (psome=2){
+			t=5
+		}
+		else : if(psome=3) {
+			tt=5
+		}
+		pr=5
+	}
+	
+	if(ng=0) : goto *main
+	if(ng=1) : goto *meinn
+	
+*kimidori
+	pyg=pyg+1　;このボタンを何回押したか。
+	
+	if(pyg=1){
+		psome=psome+1
+	}
+	
+	switch psome
+	case 1 : r1=3.0 : g1=185.0 : b1=40.0 : swbreak
+	case 2 : r2=3.0 : g2=185.0 : b2=40.0 : t=t+1 : swbreak
+	case 3 : r3=3.0 : g3=185.0 : b3=40.0 : tt=tt+1 : swbreak
+	swend
+	
+	chose=6
+	
+	if (pyg>=5){
+		if (psome=2){
+			t=5
+		}
+		else : if(psome=3) {
+			tt=5
+		}
+		pyg=5
+	}
+	
+	if(ng=0) : goto *main
+	if(ng=1) : goto *meinn
+*midori
+	pg=pg+1　;このボタンを何回押したか。
+	
+	switch pg
+	case 1 : psome=psome+1 : swbreak
+	swend
+	
+	switch psome
+	case 1 : r1=15.0 : g1=90.0 : b1=50.0 : swbreak
+	case 2 : r2=15 : g2=90 : b2=50 : t=t+1 :  swbreak
+	case 3 : r3=15 : g3=90 : b3=50 : tt=tt+1 : swbreak
+	swend
+	
+	chose=7
+	
+	if (pg>=5){
+		if (psome=2){
+			t=5
+		}
+		else : if(psome=3) {
+			tt=5
+		}
+		pg=5
+	}
+	
+	if(ng=0) : goto *main
+	if(ng=1) : goto *meinn
+*ao
+	pb=pb+1　;このボタンを何回押したか。
+	
+	if(pb=1){
+		psome=psome+1
+	}
+	
+	switch psome
+	case 1 : r1=10.0 : g1=80.0 : b1=155.0 : swbreak
+	case 2 : r2=10.0 : g2=80.0 : b2=155.0 : t=t+1 : swbreak
+	case 3 : r3=10.0 : g3=80.0 : b3=155.0 : tt=tt+1 : swbreak
+	swend
+	
+	chose=8
+	
+	if (pb>=5){
+		if (psome=2){
+			t=5
+		}
+		else : if(psome=3) {
+			tt=5
+		}
+		pb=5
+	}
+	if(ng=0) : goto *main
+	if(ng=1) : goto *meinn
+*marin
+	psb=psb+1　;このボタンを何回押したか。
+	
+	if(psb=1){
+		psome=psome+1
+	}
+	
+	switch psome
+	case 1 : r1=10 : g1=45 : b1=210 : swbreak
+	case 2 : r2=10 : g2=45 : b2=210 : t=t+1 : swbreak
+	case 3 : r3=10 : g3=45 : b3=210 : tt=tt+1 : swbreak
+	swend
+	
+	chose=9
+	
+	if (psb>=5){
+		if (psome=2){
+			t=5
+		}
+		else : if(psome=3) {
+			tt=5
+		}
+		psb=5
+	}
+	
+	if(ng=0) : goto *main
+	if(ng=1) : goto *meinn
+*murasaki
+	pp=pp+1　;このボタンを何回押したか。
+	
+	if(pp=1){
+		psome=psome+1
+	}
+	
+	switch psome
+	case 1 : r1=50 : g1=30 : b1=115 : swbreak
+	case 2 : r2=50 : g2=30 : b2=115 : t=t+1 : swbreak
+	case 3 : r3=50 : g3=30 : b3=115 : tt=tt+1 : swbreak
+	swend
+	
+	chose=10
+	
+	if (pp>=5){
+		if (psome=2){
+			t=5
+		}
+		else : if(psome=3) {
+			tt=5
+		}
+		pp=5
+	}
+	
+	if(ng=0) : goto *main
+	if(ng=1) : goto *meinn
+*tya
+	pbr=pbr+1　;このボタンを何回押したか。
+	
+	if(pbr=1){
+		psome=psome+1
+	}
+	
+	switch psome
+	case 1 : r1=125 : g1=50 : b1=45 : swbreak
+	case 2 : r2=125 : g2=50 : b2=45 : t=t+1 : swbreak
+	case 3 : r3=125 : g3=50 : b3=45 : tt=tt+1 : swbreak
+	swend
+	
+	chose=11
+	
+	if (pbr>=5){
+		if (psome=2){
+			t=5
+		}
+		else : if(psome=3) {
+			tt=5
+		}
+		pbr=5
+	}
+	
+	if(ng=0) : goto *main
+	if(ng=1) : goto *meinn
+*kuro	
+	pck=pck+1　;このボタンを何回押したか。
+	
+	if(pck=1){
+		psome=psome+1
+	}
+	
+	switch psome
+	case 1 : r1=40 : g1=40 : b1=45 : swbreak
+	case 2 : r2=40 : g2=40 : b2=45 : t=t+1 : swbreak
+	case 3 : r3=40 : g3=40 : b3=45 : tt=tt+1 : swbreak
+	swend
+	
+	chose=12
+	
+	if (pck>=5){
+		if (psome=2){
+			t=5
+		}
+		else : if(psome=3) {
+			tt=5
+		}
+		pck=5
+	}
+	
+	if(ng=0) : goto *main
+	if(ng=1) : goto *meinn
+//------------------------------------------------------------------------------------
+
+*hyouji
+	
+	switch psome
+	
+	case 3	
+	
+	
+	xx1=475.00 : xx2=645.00 : yy1=220.00 : yy2=390.00 : sa=20.00
+	xxw1=xx1-3.00 : xxw2=xx2+3.00 : yyw1=yy1-3.00 : yyw2=yy2+3.00
+	Color rr,gg,bb : circle 705,210,895,400
+	
+		switch tt
+			case 1 : xx1=xx1+sa : yy1=yy1+sa : xx2=xx2-sa : yy2=yy2-sa : xxw1=xxw1+sa : yyw1=yyw1+sa : xxw2=xxw2-sa : yyw2=yyw2-sa
+			case 2 : xx1=xx1+sa/30*29 : yy1=yy1+sa/30*29 : xx2=xx2-sa/30*29 : yy2=yy2-sa/30*29 : xxw1=xxw1+sa/30*29 : yyw1=yyw1+sa/30*29 : xxw2=xxw2-sa/30*29 : yyw2=yyw2-sa/30*29
+			case 3 : xx1=xx1+sa/30*25 : yy1=yy1+sa/30*25 : xx2=xx2-sa/30*25 : yy2=yy2-sa/30*25 : xxw1=xxw1+sa/30*25 : yyw1=yyw1+sa/30*25 : xxw2=xxw2-sa/30*25 : yyw2=yyw2-sa/30*25
+			case 4 : xx1=xx1+sa/30*16 : yy1=yy1+sa/30*16 : xx2=xx2-sa/30*16: yy2=yy2-sa/30*16 : xxw1=xxw1+sa/30*16 : yyw1=yyw1+sa/30*16 : xxw2=xxw2-sa/30*16: yyw2=yyw2-sa/30*16
+			swbreak
+			swend
+			
+		if(r3=253) : Color 200,200,200 : circle xxw1,yyw1,xxw2,yyw2
+		
+		color 38,70,83 : font "M+ 1p heavy" ,40 : pos 545,165 : mes "↓"
+	
+		Color r3,g3,b3 : circle xx1,yy1,xx2,yy2
+
+	case 2
+	x1=260.00 : y1=220.00 : x2=430.00 : y2=390.00 : sa=20.00
+	xw1=x1-3.00 : yw1=y1-3.00: xw2=x2+3.00 : yw2=y2+3.00
+	if(psome=2){
+		Color r,g,b : circle 705,210,895,400
+		color 38,70,83 : font "M+ 1p heavy" ,40 : pos 330,165 : mes "↓"
+	}
+
+		switch t
+			case 1 : x1=x1+sa : y1=y1+sa : x2=x2-sa : y2=y2-sa : xw1=xw1+sa : yw1=yw1+sa : xw2=xw2-sa : yw2=yw2-sa
+			case 2 : x1=x1+sa/30*29 : y1=y1+sa/30*29 : x2=x2-sa/30*29 : y2=y2-sa/30*29 : xw1=xw1+sa/30*29 : yw1=yw1+sa/30*29 : xw2=xw2-sa/30*29 : yw2=yw2-sa/30*29
+			case 3 : x1=x1+sa/30*25 : y1=y1+sa/30*25 : x2=x2-sa/30*25 : y2=y2-sa/30*25 : xw1=xw1+sa/30*25 : yw1=yw1+sa/30*25 : xw2=xw2-sa/30*25 : yw2=yw2-sa/30*25
+			case 4 : x1=x1+sa/30*16 : y1=y1+sa/30*16 : x2=x2-sa/30*16: y2=y2-sa/30*16 : xw1=xw1+sa/30*16 : yw1=yw1+sa/30*16 : xw2=xw2-sa/30*16: yw2=yw2-sa/30*16
+			swbreak
+			swend
+	
+		if(r2=253) : Color 200,200,200 : circle xw1,yw1,xw2,yw2
+		Color r2,g2,b2 : circle x1,y1,x2,y2
+		
+		
+		
+	case 1
+
+		if(r1=253) : Color 200,200,200 : circle 42,222,218,398 
+	
+		if (r1=253 and psome<2) : circle 702,207,898,403
+		Color r1,g1,b1
+		circle 45,225,215,395
+		if(psome=1){
+			circle 705,210,895,400
+		}
+
+	swbreak
+	swend
+	
+	if (psome>=4){
+		stop
+}
+
+	return
+	
+;-------------------------------------------------------------------------------
+
+*credit
+	
+	mode=2
+	
+	objimage -1
+	onclick 0
+	
+	cls
+	font "HGPｺﾞｼｯｸM",50
+	pos 400,20
+	mes "credit"
+	font "HGPｺﾞｼｯｸM",25,1
+	pos 20,90 : mes "参考にしたサイト"
+	pos 20,270 : mes "フォント"
+	pos 20,370 : mes "SE"
+	
+	font "HGPｺﾞｼｯｸM",20
+	pos 20,140 : mes "softgate \n http://www.sofgate.com/design/ct_gradation.html"
+font "HGPｺﾞｼｯｸM",18
+	pos 20,200 : mes "HSVTV!掲示板 \n http://hsp.tv/play/pforum.php?mode=pastwch&num=38401"
+	font "HGPｺﾞｼｯｸM",20
+	pos 20,320 : mes "04かんじゅくゴシック、M+ 1p heavy"
+	pos 20,420 : mes "Music is VFR \n http://musicisvfr.com/free/se/quiz01.html"
+	
+	pos 20,600
+	objsize 300,50
+	objimage 2,0,150,0,150,0,150
+	button "",*menu
+	
+	
+	pos 470,300
+	font "HGPｺﾞｼｯｸM",70
+	mes "制作"
+	font "HGPｺﾞｼｯｸM",40
+	pos 470,400 : mes"1年3組48番　野崎玲那"
+	font "HGPｺﾞｼｯｸM",40
+	celload "icon.png",6
+	pos 470,450 : celput 6,0
+	
+	stop
+	
+;-------------------------------------------------------------------------------------
+	
+*paretto
+	ng=0
+	goto *main
+	
+*ga 
+	ng=1
+	goto *ggggg
+	
+*owari
+	goto *menu
+	
+*stt
+	
+	clrobj
+	color 255,255,255
+	boxf
+	pos 0,0
+	picload "stt.png",1
+	
+	color 50,60,100
+
+	font "04かんじゅくゴシック",50
+	
+	pos 580,500
+	objsize 256,120
+	objimage 4,0,0,0,0,0,0
+	button "",*caunto
+	
+	stop 
+
+
+*caunto
+	
+	clrobj
+	
+	repeat 3
+	
+	redraw 0
+	
+	color 255,255,255
+	boxf 
+	
+	pos 0,0
+	picload "カウントダウン.png",1
+	
+	switch cnt
+	case 0 : a=3 : swbreak
+	case 1 : a=2 : swbreak
+	case 2 : a=1 : swbreak
+	swend
+		
+	pos 420,220 : font "04かんじゅくゴシック",150 : color 40,50,120
+	mes a
+	
+	redraw 1
+	
+	wait 100
+	
+	loop
+	
+	#include "ゲームモード3.hsp"
